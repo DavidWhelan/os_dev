@@ -50,6 +50,8 @@ int write(char *buf, unsigned int len)
 		if(buf[i] == '\n')
 		{
 			letterPos = 80 + (letterPos - (letterPos % 80));
+			cursorPos = 81 + (cursorPos - (cursorPos % 80));
+			fb_move_cursor(cursorPos);
 			continue;
 		}
 		if(letterPos >= 1999)
@@ -62,11 +64,12 @@ int write(char *buf, unsigned int len)
 				fbm[i] = fbe[i];
 			}
 			letterPos = 1920;
+			cursorPos = 1920 + len;
 		}
 		fb_write_cell(letterPos * 2, buf[i], FB_BLACK, FB_WHITE);
 		fb_move_cursor(cursorPos);
 		letterPos++;
-		//cursorPos++;
+		cursorPos++;
 	}
 	return 1;
 }
@@ -81,4 +84,7 @@ void init()
 void kmain()
 {
 	init();
+	write("Hello World\n", 12);
+	write("Hello World", 11);
+	write("\nTest", 5);
 }
